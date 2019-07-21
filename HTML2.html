@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top" />
+  </head>
+  <style>
+    table,
+    td {
+      border: 1px solid black;
+    }
+    th {
+      border: 2px solid rgb(66, 2, 104);
+      background-color: rgb(245, 185, 240);
+    }
+  </style>
+  <body>
+    <input type="text" id="startDate" value="01/10/1990" required></input>
+    <input type="button" onclick="submitDateButton()" value="submit button"></input>
+    <p id="errorSpot"></p>
+    <table id="bigTable"></table>
+  </body>
+  <script>
+    var lastUpdated;
+    google.script.run
+    .withSuccessHandler(function(response){
+      lastUpdated = new Date(response).getTime();
+    })
+    .getLastUpdate();////
+    // google.script.run
+    //   .withSuccessHandler(function(response) {
+    //     var bigTable = document.getElementById("bigTable");
+    //     var header = bigTable.createTHead();
+    //     var rowHeader = header.insertRow(0);
+    //     for (var i = 0; i < response.length; i++) {
+    //       var cell = bigTable.tHead.children[0].appendChild(
+    //         document.createElement("TH")
+    //       );
+    //       cell.innerHTML = response[i];
+    //     }
+    //     console.log("ok");
+    //   })
+    //   .withFailureHandler(function(error) {
+    //     console.log(error);
+    //   })
+    //   .contactHeaders();
+
+    google.script.run
+      .withSuccessHandler(function(response) {
+        //
+        var headerValues = response.shift();
+        var bigTable = document.getElementById("bigTable");
+        var header = bigTable.createTHead();
+        var rowHeader = header.insertRow(0);
+        for (var i = 0; i < headerValues.length; i++) {
+          var cell = bigTable.tHead.children[0].appendChild(
+            document.createElement("TH")
+          );
+          cell.innerHTML = headerValues[i];
+        }
+        //
+        var bigTable = document.getElementById("bigTable");
+        response.forEach(function(row) {
+          var newRow = bigTable.insertRow(-1);
+          row.forEach(function(element) {
+            var newCell = newRow.insertCell(-1);
+            newCell.innerHTML = element;
+          });
+        });
+      })
+      .withFailureHandler(function(error) {
+        console.log(error);
+      })
+      .prepDataWithFullRange();
+
+function submitDateButton(){
+  var textboxValue = document.getElementById("startDate").value;
+  var submittedTime = new Date(textboxValue).getTime();
+  if (submittedTime > lastUpdated){
+    document.getElementById("errorSpot").innerHTML = "date wrong";
+    return;
+  }
+//   google.script.run
+//   .withSuccessHandler(function(response)  {
+//     console.log(response);
+//   })
+//   .withFailureHandler(function(error){
+//     console.log(error);})
+//     .submitDate(document.getElementById("startDate").value);
+// }
+  google.script.run
+    .withSuccessHandler(function (response) {
+      var headerValues = response.shift();
+      var bigTable = document.getElementById("bigTable");
+      bigTable.innerHTML = "";
+      var header = bigTable.createTHead();
+      var rowHeader = header.insertRow(0);
+      for (var i = 0; i < headerValues.length; i++) {
+        var cell = bigTable.tHead.children[0].appendChild(
+          document.createElement("TH")
+        );
+        cell.innerHTML = headerValues[i];
+      }
+      
+      response.forEach(function (row) {
+        var newRow = bigTable.insertRow(-1);
+        row.forEach(function (element) {
+          var newCell = newRow.insertCell(-1);
+          newCell.innerHTML = element;
+        });
+      });
+    })
+    .withFailureHandler(function (error) {
+      console.log(error);
+    })
+            .prepDataWithSubmitDate(document.getElementById("startDate").value);
+  }
+  
+  </script>
+</html>

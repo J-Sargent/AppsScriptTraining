@@ -1,0 +1,9 @@
+{
+  "timeZone": "America/Mexico_City",
+  "dependencies": {},
+  "webapp": {
+    "access": "DOMAIN",
+    "executeAs": "USER_ACCESSING"
+  },
+  "exceptionLogging": "STACKDRIVER"
+}

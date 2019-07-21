@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <base target="_top" />
+  </head>
+
+  <body>
+    <h2>Summaries:</h2>
+    <p id="summary">id</p>
+    <iframe
+      src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjsnPgDhTtHj_sMANJSVXSuhDlaVGuN39vFBoWsv2_fyIUxMgeVshJ63UONkCVRG1iQRABHRDWwbIK/pubhtml?gid=1872332294&amp;single=true&amp;widget=true&amp;headers=false"
+      width="90%"
+      height="300"
+    ></iframe>
+    <script>
+      google.script.run
+        .withSuccessHandler(function(response) {
+          var stringSummary = response.reduce(function(total, current) {
+            return total + "<br>" + current;
+          }, "");
+          console.log(stringSummary);
+          document.getElementById("summary").innerHTML = stringSummary;
+        })
+        .withFailureHandler(function(error) {
+          console.log(error);
+        })
+        .getSummaries();
+    </script>
+  </body>
+</html>
